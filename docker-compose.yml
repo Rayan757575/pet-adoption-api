@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: pet-postgres # container name
+    environment: # Variáveis de ambiente para configuração do DB
+      POSTGRES_DB: pet_adoption_db
+      POSTGRES_USER: pet_user
+      POSTGRES_PASSWORD: supersecretpassword
+    ports:
+      - "5432:5432" # Mapeia a porta do container (5432) para a porta da sua máquina (5432)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persiste os dados em um volume nomeado
+
+volumes:
+  # Volume para manter os dados
+  postgres_data:
