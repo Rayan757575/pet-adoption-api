@@ -52,6 +52,7 @@ public class User implements UserDetails {
         }
     }
 
+    //used by spring to identify the user on the system
     @Override
     public String getUsername() {
         return email;
