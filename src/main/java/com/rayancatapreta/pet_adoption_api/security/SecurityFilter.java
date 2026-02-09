@@ -30,16 +30,16 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
             var email = tokenService.validateToken(token);
-            // Busca o usuário para verificar suas permissões (getAuthorities)
+            // Search for the user to verify their permissions (getAuthorities)
             UserDetails user = userRepository.findByEmail(email).orElse(null);
 
             if (user != null) {
-                // Injeta as permissões no contexto do Spring
+                // Injects permissions into the Spring context
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        // Segue para o próximo filtro ou para o Controller
+        // Proceed to the next filter or to the Controller
         filterChain.doFilter(request, response);
     }
 

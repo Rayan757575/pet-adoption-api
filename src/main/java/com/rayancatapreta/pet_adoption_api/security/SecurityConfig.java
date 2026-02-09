@@ -29,8 +29,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        // Exige que o usuário esteja autentificado para acessar qualquer rota que não a de login ou
-                        // de registro
+                        // Requires the user to be authenticated to access any route other than the login or
+                        // registration route
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
