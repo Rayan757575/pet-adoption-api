@@ -25,11 +25,11 @@ public class Pet {
     private Integer age;
     private String description;
     private String photoUrl;
-    //private String address;
+    private String address;
     //private PetStatus petStatus;
     /*@ManyToOne
-        private User postedByUser
-     */
+        private User postedByUser // Who add the pet on the platform
     @CreationTimestamp
     private Instant createdAt;
+    */
 }
