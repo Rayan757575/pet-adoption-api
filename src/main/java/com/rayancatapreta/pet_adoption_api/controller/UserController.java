@@ -1,6 +1,7 @@
 package com.rayancatapreta.pet_adoption_api.controller;
 
 import com.rayancatapreta.pet_adoption_api.dto.auth.RegisterRequestDTO;
+import com.rayancatapreta.pet_adoption_api.enums.Role;
 import com.rayancatapreta.pet_adoption_api.model.User;
 import com.rayancatapreta.pet_adoption_api.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -36,6 +37,8 @@ public class UserController {
                 .name(data.name())
                 .email(data.email())
                 .password(encryptedPassword)
+                .role(Role.ROLE_USER)
+                .active(true)
                 .build();
 
         // 4. Persistimos no banco de dados

@@ -42,6 +42,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean active;
+
     //useful methods for Spring security
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -75,6 +78,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.active;
     }
 }
