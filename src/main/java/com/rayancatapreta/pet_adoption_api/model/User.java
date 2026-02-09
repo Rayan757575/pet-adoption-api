@@ -2,6 +2,7 @@ package com.rayancatapreta.pet_adoption_api.model;
 
 import com.rayancatapreta.pet_adoption_api.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +23,7 @@ public class User implements UserDetails {
     private Long  id;
 
     @Column(unique = true, nullable = false)
+    @Email
     private String email;
 
     @Setter(AccessLevel.NONE) // prevents the creation of setters methods do password field
