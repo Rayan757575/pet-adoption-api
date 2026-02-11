@@ -1,14 +1,13 @@
 package com.rayancatapreta.pet_adoption_api.controller;
 
 import com.rayancatapreta.pet_adoption_api.dto.auth.RegisterRequestDTO;
-import com.rayancatapreta.pet_adoption_api.enums.Role;
 import com.rayancatapreta.pet_adoption_api.model.User;
 import com.rayancatapreta.pet_adoption_api.repository.UserRepository;
+import com.rayancatapreta.pet_adoption_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,32 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("users")
 @RequiredArgsConstructor
 public class UserController {
-
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
-        // Check if the user already exists
-        if (this.userRepository.findByEmail(registerRequestDTO.email()).isPresent()) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
+        try {
+            this.userService.register(registerRequestDTO); // Delegate the logic
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            // Returns 400 with the specific error message
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        // Encrypt the password before creating the User object
-        String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequestDTO.password());
-
-        // Creates (Instantiates) the new user
-        User newUser = User.builder()
-                .name(registerRequestDTO.name())
-                .email(registerRequestDTO.email())
-                .password(encryptedPassword)
-                .role(Role.ROLE_USER)
-                .active(true)
-                .build();
-
-        // Persists in the database.
-        this.userRepository.save(newUser);
-
-        return ResponseEntity.ok().build();
     }
 }
