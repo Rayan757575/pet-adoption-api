@@ -4,11 +4,11 @@ import com.rayancatapreta.pet_adoption_api.dto.auth.RegisterRequestDTO;
 import com.rayancatapreta.pet_adoption_api.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+//import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
-    public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    //public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(target = "password", source = "encodedPassword") // Ignore to be treated in the Service file
     @Mapping(target = "role", constant = "ROLE_USER") // Define a default role
