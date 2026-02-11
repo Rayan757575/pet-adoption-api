@@ -24,15 +24,15 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO data) {
-        // 1. Verifica se o usuário já existe para evitar duplicidade
+        // Check if the user already exists
         if (this.userRepository.findByEmail(data.email()).isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
-        // 2. Criptografa a senha antes de criar o objeto User
+        // Encrypt the password before creating the User object
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
-        // 3. Instancia o novo usuário com a senha protegida
+        // Creates (Instantiates) the new user
         User newUser = User.builder()
                 .name(data.name())
                 .email(data.email())
@@ -41,7 +41,7 @@ public class UserController {
                 .active(true)
                 .build();
 
-        // 4. Persistimos no banco de dados
+        // Persists in the database.
         this.userRepository.save(newUser);
 
         return ResponseEntity.ok().build();
