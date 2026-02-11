@@ -26,9 +26,9 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid LoginRequestDTO data) {
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),
-                data.password());
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDTO.email(),
+                loginRequestDTO.password());
         Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
         String token = tokenService.generateToken((User) auth.getPrincipal());

@@ -23,19 +23,19 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO data) {
+    public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
         // Check if the user already exists
-        if (this.userRepository.findByEmail(data.email()).isPresent()) {
+        if (this.userRepository.findByEmail(registerRequestDTO.email()).isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
         // Encrypt the password before creating the User object
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequestDTO.password());
 
         // Creates (Instantiates) the new user
         User newUser = User.builder()
-                .name(data.name())
-                .email(data.email())
+                .name(registerRequestDTO.name())
+                .email(registerRequestDTO.email())
                 .password(encryptedPassword)
                 .role(Role.ROLE_USER)
                 .active(true)
