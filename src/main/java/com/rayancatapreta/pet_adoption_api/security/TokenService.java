@@ -1,4 +1,4 @@
-package com.rayancatapreta.pet_adoption_api.service;
+package com.rayancatapreta.pet_adoption_api.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -8,15 +8,17 @@ import com.rayancatapreta.pet_adoption_api.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import lombok.extern.slf4j.Slf4j;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TokenService {
 
+    private static final String ISSUER = "pet-adoption-api";
     @Value("${api.security.token.secret}")
     private String secret;
 
@@ -24,11 +26,12 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("pet-adoption-api")
+                    .withIssuer(ISSUER)
                     .withSubject(user.getEmail())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
+            log.error("Error generating token for user {}: ", user.getEmail(), exception);
             throw new RuntimeException("Error generating token", exception);
         }
     }
@@ -37,11 +40,12 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("pet-adoption-api")
+                    .withIssuer(ISSUER)
                     .build()
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
+            log.warn("Validation attempt with invalid token");
             return "";
         }
     }

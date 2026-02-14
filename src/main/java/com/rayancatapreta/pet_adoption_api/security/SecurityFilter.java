@@ -1,7 +1,6 @@
 package com.rayancatapreta.pet_adoption_api.security;
 
 import com.rayancatapreta.pet_adoption_api.repository.UserRepository;
-import com.rayancatapreta.pet_adoption_api.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -2,14 +2,10 @@ package com.rayancatapreta.pet_adoption_api.controller;
 
 import com.rayancatapreta.pet_adoption_api.dto.auth.LoginRequestDTO;
 import com.rayancatapreta.pet_adoption_api.dto.auth.TokenResponseDTO;
-import com.rayancatapreta.pet_adoption_api.model.User;
-import com.rayancatapreta.pet_adoption_api.service.TokenService;
+import com.rayancatapreta.pet_adoption_api.service.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,22 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private TokenService tokenService;
+    private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
-        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(loginRequestDTO.email(),
-                loginRequestDTO.password());
-        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
-
-        String token = tokenService.generateToken((User) auth.getPrincipal());
-
-        return ResponseEntity.ok(new TokenResponseDTO(token));
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
+        try {
+            TokenResponseDTO response = authService.login(loginRequestDTO);
+            return ResponseEntity.ok(response);
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            // Specifically captures login errors (wrong password, user does not exist)
+            return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).body("Invalid credentials");
+        } catch (Exception e) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
