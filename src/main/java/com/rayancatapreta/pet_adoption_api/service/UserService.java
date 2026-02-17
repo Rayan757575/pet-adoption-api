@@ -16,12 +16,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public User register(RegisterRequestDTO registerRequestDTO) {
-        if (userRepository.existsByEmail(registerRequestDTO.email())) { // Check if the user already exists
+        if (this.userRepository.existsByEmail(registerRequestDTO.email())) { // Check if the user already exists
             throw new RuntimeException("Email already in use");
         }
-        String encodedPassword = passwordEncoder.encode(registerRequestDTO.password()); // Encrypt the password and set
-        User user = userMapper.toUser(registerRequestDTO, encodedPassword); // Transform the variable in a User type
-        return userRepository.save(user); // Save the user "user"
+        String encodedPassword = this.passwordEncoder.encode(registerRequestDTO.password()); // Encrypt the password
+        User user = this.userMapper.toUser(registerRequestDTO, encodedPassword); // Transform the variables in a User type
+        return this.userRepository.save(user); // Save the user
     }
 
 }
