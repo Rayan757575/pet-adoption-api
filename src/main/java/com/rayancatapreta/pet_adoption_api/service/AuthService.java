@@ -18,10 +18,10 @@ public class AuthService {
     private final TokenService tokenService;
 
     public TokenResponseDTO login(LoginRequestDTO loginRequestDTO) {
-        UsernamePasswordAuthenticationToken usernamePassword =
-                new UsernamePasswordAuthenticationToken(
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
                         loginRequestDTO.email(),
-                        loginRequestDTO.password());
+                        loginRequestDTO.password()
+        );
 
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
