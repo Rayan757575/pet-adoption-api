@@ -5,15 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record RegisterRequestDTO(
-        @NotBlank
+        @NotBlank(message = "The user name address cannot be blank")
         String name,
 
-        @NotBlank
+        @NotBlank(message = "The email address cannot be blank")
         @Email
         String email,
 
-        @NotBlank
-        //@Size(min = 6) //define the minimum password's size
+        @NotBlank(message = "The password cannot be blank")
+        @Size(min = 6, message = "The password must be longer than 6 characters") //define the minimum password's size
         String password
 ) {
 }
