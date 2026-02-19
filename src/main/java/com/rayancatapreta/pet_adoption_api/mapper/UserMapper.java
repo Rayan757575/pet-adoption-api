@@ -1,6 +1,7 @@
 package com.rayancatapreta.pet_adoption_api.mapper;
 
-import com.rayancatapreta.pet_adoption_api.dto.auth.RegisterRequestDTO;
+import com.rayancatapreta.pet_adoption_api.dto.user.RegisterRequestDTO;
+import com.rayancatapreta.pet_adoption_api.dto.user.UserResponseDTO;
 import com.rayancatapreta.pet_adoption_api.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,4 +19,6 @@ public abstract class UserMapper {
     @Mapping(target = "phone", ignore = true)
     @Mapping(target = "address", ignore = true)
     public abstract User toUser(RegisterRequestDTO registerRequestDTO, String encodedPassword);
+
+    public abstract UserResponseDTO toResponseDTO(User user);
 }

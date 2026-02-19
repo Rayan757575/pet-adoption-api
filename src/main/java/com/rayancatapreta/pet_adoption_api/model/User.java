@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private String name;
+    private String firstName;
 
     private String lastName;
 

@@ -27,10 +27,18 @@ public class SecurityConfigurations {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        // Public Routes
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
-                        // Requires the user to be authenticated to access any route other than the login or
-                        // registration route
+
+                        // User Routes (Anyone authenticated)
+                        .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
+
+                        // Admin Roles
+                        .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users/search").hasRole("ADMIN")
+
+                        // Any other route requires authentication
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
