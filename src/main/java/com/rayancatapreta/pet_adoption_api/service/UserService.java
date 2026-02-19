@@ -1,6 +1,7 @@
 package com.rayancatapreta.pet_adoption_api.service;
 
 import com.rayancatapreta.pet_adoption_api.dto.user.RegisterRequestDTO;
+import com.rayancatapreta.pet_adoption_api.dto.user.UpdateRequestDTO;
 import com.rayancatapreta.pet_adoption_api.mapper.UserMapper;
 import com.rayancatapreta.pet_adoption_api.model.User;
 import com.rayancatapreta.pet_adoption_api.repository.UserRepository;
@@ -16,7 +17,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public User findByIdOrThrowBadRequestException(Long id){
+    public User findByIdOrThrowBadRequestException(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not Found"));
     }
 
@@ -38,5 +39,20 @@ public class UserService {
         // Transform the variables "registerRequestDTO" and "encodedPassword" in a User type to be saved
         User user = this.userMapper.toUser(registerRequestDTO, encodedPassword);
         return this.userRepository.save(user);
+    }
+
+    public User updateAuthenticatedUser(UpdateRequestDTO updateRequestDTO) {
+        User user = getAuthenticatedUser();
+
+        // Checks if the request field is null before updating, to avoid updating values to null and remove the
+        // requirement to send all filled fields in a request.
+        if (updateRequestDTO.firstName() != null && !updateRequestDTO.firstName().isBlank()) {
+            user.setFirstName(updateRequestDTO.firstName());
+        }
+        if (updateRequestDTO.lastName() != null) user.setLastName(updateRequestDTO.lastName());
+        if (updateRequestDTO.phone() != null) user.setPhone(updateRequestDTO.phone());
+        if (updateRequestDTO.address() != null) user.setAddress(updateRequestDTO.address());
+
+        return userRepository.save(user);
     }
 }

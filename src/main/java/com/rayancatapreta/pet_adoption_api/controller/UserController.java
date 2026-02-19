@@ -1,6 +1,7 @@
 package com.rayancatapreta.pet_adoption_api.controller;
 
 import com.rayancatapreta.pet_adoption_api.dto.user.RegisterRequestDTO;
+import com.rayancatapreta.pet_adoption_api.dto.user.UpdateRequestDTO;
 import com.rayancatapreta.pet_adoption_api.dto.user.UserResponseDTO;
 import com.rayancatapreta.pet_adoption_api.mapper.UserMapper;
 import com.rayancatapreta.pet_adoption_api.service.UserService;
@@ -37,4 +38,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDTO> updateMe(@RequestBody UpdateRequestDTO updateRequestDTO) {
+        return ResponseEntity.ok(userMapper.toResponseDTO(userService.updateAuthenticatedUser(updateRequestDTO)));
+    }
 }
