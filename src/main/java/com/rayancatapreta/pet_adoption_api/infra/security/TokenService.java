@@ -1,4 +1,4 @@
-package com.rayancatapreta.pet_adoption_api.security;
+package com.rayancatapreta.pet_adoption_api.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

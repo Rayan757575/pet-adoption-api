@@ -1,6 +1,6 @@
 package com.rayancatapreta.pet_adoption_api.service;
 
-import com.rayancatapreta.pet_adoption_api.dto.auth.RegisterRequestDTO;
+import com.rayancatapreta.pet_adoption_api.dto.user.RegisterRequestDTO;
 import com.rayancatapreta.pet_adoption_api.mapper.UserMapper;
 import com.rayancatapreta.pet_adoption_api.model.User;
 import com.rayancatapreta.pet_adoption_api.repository.UserRepository;
@@ -16,12 +16,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public User register(RegisterRequestDTO registerRequestDTO) {
-        if (this.userRepository.existsByEmail(registerRequestDTO.email())) { // Check if the user already exists
+        // Check if the user already exists to avoid duplicates
+        if (this.userRepository.existsByEmail(registerRequestDTO.email())) {
             throw new RuntimeException("Email already in use");
         }
         String encodedPassword = this.passwordEncoder.encode(registerRequestDTO.password()); // Encrypt the password
-        User user = this.userMapper.toUser(registerRequestDTO, encodedPassword); // Transform the variables in a User type
-        return this.userRepository.save(user); // Save the user
+        // Transform the variables "registerRequestDTO" and "encodedPassword" in a User type to be saved
+        User user = this.userMapper.toUser(registerRequestDTO, encodedPassword);
+        return this.userRepository.save(user);
     }
 
 }

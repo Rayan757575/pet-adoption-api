@@ -20,14 +20,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDTO loginRequestDTO) {
-        try {
-            TokenResponseDTO response = authService.login(loginRequestDTO);
-            return ResponseEntity.ok(response);
-        } catch (org.springframework.security.core.AuthenticationException e) {
-            // Specifically captures login errors (wrong password, user does not exist)
-            return ResponseEntity.status(org.springframework.http.HttpStatus.FORBIDDEN).body("Invalid credentials");
-        } catch (Exception e) {
-            return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        TokenResponseDTO response = authService.login(loginRequestDTO);
+        return ResponseEntity.ok(response);
     }
 }

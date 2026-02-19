@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432" # Mapeia a porta do container (5432) para a porta da sua máquina (5432)
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persiste os dados em um volume nomeado
+      - postgres_data:/var/lib/postgresql/data # Persiste os dados em um volume nomeado "postgres_data"
 
 volumes:
   # Volume para manter os dados

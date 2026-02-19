@@ -1,4 +1,4 @@
-package com.rayancatapreta.pet_adoption_api.dto.auth;
+package com.rayancatapreta.pet_adoption_api.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

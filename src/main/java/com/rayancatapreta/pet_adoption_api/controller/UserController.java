@@ -1,6 +1,6 @@
 package com.rayancatapreta.pet_adoption_api.controller;
 
-import com.rayancatapreta.pet_adoption_api.dto.auth.RegisterRequestDTO;
+import com.rayancatapreta.pet_adoption_api.dto.user.RegisterRequestDTO;
 import com.rayancatapreta.pet_adoption_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
-        try {
-            this.userService.register(registerRequestDTO); // Delegate the logic
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            // Returns 400 with the specific error message
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        this.userService.register(registerRequestDTO); // Delegate the logic to register a new user
+        return ResponseEntity.ok().build();
     }
 }

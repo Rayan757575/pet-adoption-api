@@ -1,4 +1,4 @@
-package com.rayancatapreta.pet_adoption_api.security;
+package com.rayancatapreta.pet_adoption_api.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

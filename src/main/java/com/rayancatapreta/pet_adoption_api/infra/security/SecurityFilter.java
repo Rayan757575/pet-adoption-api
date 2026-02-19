@@ -1,4 +1,4 @@
-package com.rayancatapreta.pet_adoption_api.security;
+package com.rayancatapreta.pet_adoption_api.infra.security;
 
 import com.rayancatapreta.pet_adoption_api.repository.UserRepository;
 import jakarta.servlet.FilterChain;
