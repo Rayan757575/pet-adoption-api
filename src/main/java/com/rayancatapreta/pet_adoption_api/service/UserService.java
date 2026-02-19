@@ -17,6 +17,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    // GETS METHODS
     public User findByIdOrThrowBadRequestException(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not Found"));
     }
@@ -30,6 +31,7 @@ public class UserService {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    // POST METHODS
     public User register(RegisterRequestDTO registerRequestDTO) {
         // Check if the user already exists to avoid duplicates
         if (this.userRepository.existsByEmail(registerRequestDTO.email())) {
@@ -41,6 +43,7 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    // PATCH/PUT METHODS
     public User updateAuthenticatedUser(UpdateRequestDTO updateRequestDTO) {
         User user = getAuthenticatedUser();
         copyNonNullProperties(user, updateRequestDTO);
@@ -53,6 +56,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // DELETE METHODS
     public void deleteAuthenticatedUser() {
         User user = getAuthenticatedUser();
         if (user.isEnabled()) {
@@ -74,15 +78,9 @@ public class UserService {
         userRepository.delete(user);
     }
 
-
-
-
-
-
-
+    // Checks if the request field is null before updating, to avoid updating values to null and remove the
+    // requirement to send all filled fields in a request.
     private void copyNonNullProperties(User user, UpdateRequestDTO updateRequestDTO) {
-        // Checks if the request field is null before updating, to avoid updating values to null and remove the
-        // requirement to send all filled fields in a request.
         if (updateRequestDTO.firstName() != null && !updateRequestDTO.firstName().isBlank()){
             user.setFirstName(updateRequestDTO.firstName());
         }
