@@ -43,9 +43,26 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toResponseDTO(userService.updateAuthenticatedUser(updateRequestDTO)));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> updateByAdmin(@PathVariable Long id, @RequestBody UpdateRequestDTO updateRequestDTO) {
+        return ResponseEntity.ok(userMapper.toResponseDTO(userService.updateByAdmin(id, updateRequestDTO)));
+    }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<Void> reactivateUserById(@PathVariable Long id) {
+        userService.reactivateUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteMe() {
         this.userService.deleteAuthenticatedUser(); // Delegate the logic for the soft deletion of a user
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> hardDeleteUserByAdmin(@PathVariable Long id) {
+        userService.hardDeleteUserByAdmin(id);
         return ResponseEntity.noContent().build();
     }
 }

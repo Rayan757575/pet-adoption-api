@@ -43,14 +43,13 @@ public class UserService {
 
     public User updateAuthenticatedUser(UpdateRequestDTO updateRequestDTO) {
         User user = getAuthenticatedUser();
-        // Checks if the request field is null before updating, to avoid updating values to null and remove the
-        // requirement to send all filled fields in a request.
-        if (updateRequestDTO.firstName() != null && !updateRequestDTO.firstName().isBlank()) {
-            user.setFirstName(updateRequestDTO.firstName());
-        }
-        if (updateRequestDTO.lastName() != null) user.setLastName(updateRequestDTO.lastName());
-        if (updateRequestDTO.phone() != null) user.setPhone(updateRequestDTO.phone());
-        if (updateRequestDTO.address() != null) user.setAddress(updateRequestDTO.address());
+        copyNonNullProperties(user, updateRequestDTO);
+        return userRepository.save(user);
+    }
+
+    public User updateByAdmin(Long id, UpdateRequestDTO updateRequestDTO) {
+        User user = findByIdOrThrowBadRequestException(id);
+        copyNonNullProperties(user, updateRequestDTO);
         return userRepository.save(user);
     }
 
@@ -60,5 +59,35 @@ public class UserService {
             user.setActive(false);
             userRepository.save(user);
         }
+    }
+
+    public void reactivateUserById(Long id) {
+        User user = findByIdOrThrowBadRequestException(id);
+        if (!user.isEnabled()) {
+            user.setActive(true);
+            userRepository.save(user);
+        }
+    }
+
+    public void hardDeleteUserByAdmin(Long id) {
+        User user = findByIdOrThrowBadRequestException(id);
+        userRepository.delete(user);
+    }
+
+
+
+
+
+
+
+    private void copyNonNullProperties(User user, UpdateRequestDTO updateRequestDTO) {
+        // Checks if the request field is null before updating, to avoid updating values to null and remove the
+        // requirement to send all filled fields in a request.
+        if (updateRequestDTO.firstName() != null && !updateRequestDTO.firstName().isBlank()){
+            user.setFirstName(updateRequestDTO.firstName());
+        }
+        if (updateRequestDTO.lastName() != null) user.setLastName(updateRequestDTO.lastName());
+        if (updateRequestDTO.phone() != null) user.setPhone(updateRequestDTO.phone());
+        if (updateRequestDTO.address() != null) user.setAddress(updateRequestDTO.address());
     }
 }

@@ -33,10 +33,15 @@ public class SecurityConfigurations {
 
                         // User Routes (Anyone authenticated)
                         .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/users/me").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/users/me").authenticated()
 
                         // Admin Roles
                         .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/users/search").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/users/{id}/active").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
 
                         // Any other route requires authentication
                         .anyRequest().authenticated()
