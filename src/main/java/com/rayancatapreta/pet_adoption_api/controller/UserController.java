@@ -42,4 +42,10 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> updateMe(@RequestBody UpdateRequestDTO updateRequestDTO) {
         return ResponseEntity.ok(userMapper.toResponseDTO(userService.updateAuthenticatedUser(updateRequestDTO)));
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteMe() {
+        this.userService.deleteAuthenticatedUser(); // Delegate the logic for the soft deletion of a user
+        return ResponseEntity.noContent().build();
+    }
 }

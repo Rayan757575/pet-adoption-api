@@ -43,7 +43,6 @@ public class UserService {
 
     public User updateAuthenticatedUser(UpdateRequestDTO updateRequestDTO) {
         User user = getAuthenticatedUser();
-
         // Checks if the request field is null before updating, to avoid updating values to null and remove the
         // requirement to send all filled fields in a request.
         if (updateRequestDTO.firstName() != null && !updateRequestDTO.firstName().isBlank()) {
@@ -52,7 +51,14 @@ public class UserService {
         if (updateRequestDTO.lastName() != null) user.setLastName(updateRequestDTO.lastName());
         if (updateRequestDTO.phone() != null) user.setPhone(updateRequestDTO.phone());
         if (updateRequestDTO.address() != null) user.setAddress(updateRequestDTO.address());
-
         return userRepository.save(user);
+    }
+
+    public void deleteAuthenticatedUser() {
+        User user = getAuthenticatedUser();
+        if (user.isEnabled()) {
+            user.setActive(false);
+            userRepository.save(user);
+        }
     }
 }
