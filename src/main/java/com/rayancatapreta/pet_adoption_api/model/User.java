@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @Email
     private String email;
 
-    @Setter(AccessLevel.NONE) // prevents the creation of setters methods do password field
+    @Setter(AccessLevel.NONE) // prevents the creation of password field's setters methods
     @Column(nullable = false)
     private String password;
 
@@ -79,5 +79,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.active;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
     }
 }
