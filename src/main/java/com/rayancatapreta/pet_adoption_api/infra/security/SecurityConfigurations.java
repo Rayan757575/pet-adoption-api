@@ -35,6 +35,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/users/me").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/users/me").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/users/me/password").authenticated()
 
                         // Admin Roles
                         .requestMatchers(HttpMethod.GET, "/users/{id}").hasRole("ADMIN")
@@ -42,6 +43,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/users/{id}/active").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/users/{id}/promote").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
 
                         // Any other route requires authentication
                         .anyRequest().authenticated()

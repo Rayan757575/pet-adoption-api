@@ -1,12 +1,12 @@
 package com.rayancatapreta.pet_adoption_api.controller;
 
-import com.rayancatapreta.pet_adoption_api.dto.user.RegisterRequestDTO;
-import com.rayancatapreta.pet_adoption_api.dto.user.UpdateRequestDTO;
-import com.rayancatapreta.pet_adoption_api.dto.user.UserResponseDTO;
+import com.rayancatapreta.pet_adoption_api.dto.user.*;
 import com.rayancatapreta.pet_adoption_api.mapper.UserMapper;
 import com.rayancatapreta.pet_adoption_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+
+    @GetMapping
+    public ResponseEntity<Page<UserResponseDTO>> listAll(Pageable pageable) {
+        return ResponseEntity.ok(userService.listAll(pageable).map(userMapper::toResponseDTO));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
@@ -34,7 +39,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequestDTO registerRequestDTO) {
-        this.userService.register(registerRequestDTO); // Delegate the logic to register a new user
+        userService.register(registerRequestDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -48,6 +53,18 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toResponseDTO(userService.updateByAdmin(id, updateRequestDTO)));
     }
 
+    @PatchMapping("/{id}/promote")
+    public ResponseEntity<Void> promoteToAdmin(@PathVariable Long id, @RequestBody RoleUpdateRequestDTO roleDTO) {
+        userService.promoteToAdmin(id, roleDTO);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> updatePassword(@RequestBody PasswordUpdateRequestDTO passwordUpdateRequestDTO) {
+        userService.updatePassword(passwordUpdateRequestDTO);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{id}/active")
     public ResponseEntity<Void> reactivateUserById(@PathVariable Long id) {
         userService.reactivateUserById(id);
@@ -56,7 +73,7 @@ public class UserController {
 
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteMe() {
-        this.userService.deleteAuthenticatedUser(); // Delegate the logic for the soft deletion of a user
+        userService.deleteAuthenticatedUser();
         return ResponseEntity.noContent().build();
     }
 
