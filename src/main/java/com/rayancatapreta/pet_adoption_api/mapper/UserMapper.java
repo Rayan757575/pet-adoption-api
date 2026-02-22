@@ -30,9 +30,9 @@ public abstract class UserMapper {
     public abstract void updateUserFromDto(UpdateRequestDTO updateRequestDTO, @MappingTarget User user);
 
     @AfterMapping
-    protected void validateFirstName(@MappingTarget User user) {
-        if (user.getFirstName() != null && user.getFirstName().isBlank()) {
-            System.out.println("Aviso: Tentativa de atualizar firstName com valor em branco ignorada.");
+    protected void validateFirstName(@MappingTarget User user, UpdateRequestDTO updateRequestDTO) {
+        if (updateRequestDTO.firstName() != null && updateRequestDTO.firstName().isBlank()) {
+            throw new RuntimeException("First name cannot be empty or consist only of spaces.");
         }
     }
 }
