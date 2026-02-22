@@ -5,7 +5,6 @@ import com.rayancatapreta.pet_adoption_api.dto.user.UpdateRequestDTO;
 import com.rayancatapreta.pet_adoption_api.dto.user.UserResponseDTO;
 import com.rayancatapreta.pet_adoption_api.model.User;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class UserMapper {
@@ -33,9 +32,6 @@ public abstract class UserMapper {
     @AfterMapping
     protected void validateFirstName(@MappingTarget User user) {
         if (user.getFirstName() != null && user.getFirstName().isBlank()) {
-            // Aqui você pode decidir se lança erro ou mantém o anterior.
-            // Como o MapStruct já rodou, se quiser manter o anterior em caso de blank,
-            // a lógica manual ainda é mais precisa, mas o null check o MapStruct já resolve.
             System.out.println("Aviso: Tentativa de atualizar firstName com valor em branco ignorada.");
         }
     }
