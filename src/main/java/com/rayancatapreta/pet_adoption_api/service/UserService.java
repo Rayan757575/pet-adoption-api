@@ -76,7 +76,7 @@ public class UserService {
     public void promoteToAdmin(Long id, RoleUpdateRequestDTO roleDTO) {
         User user = findByIdOrThrowBadRequestException(id);
         if (user.getRole() == roleDTO.role()) {
-            throw new RuntimeException("The user already holds the" + roleDTO.role() + "role");
+            throw new RuntimeException("The user already holds the " + roleDTO.role() + " role");
         }
         user.setRole(roleDTO.role());
         userRepository.save(user);
